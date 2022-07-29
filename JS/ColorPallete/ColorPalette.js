@@ -1,4 +1,9 @@
-/** Class based on Rob Camick's HSL Color library for Java
+/** 
+ * Written by Michael Zagar and Jonathan Lee.
+ * Started in June 2022
+ * Last Updated July 29 2022
+ * 
+ * Class based on Rob Camick's HSL Color library for Java
  * Retrieved on August 20th, 2020
  * https://tips4java.wordpress.com/2009/07/05/hsl-color/
  *
