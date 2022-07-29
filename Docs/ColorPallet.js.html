@@ -18,16 +18,16 @@
 <div id="main">
 
     <h1 class="page-title">Source: ColorPallet.js</h1>
-
-    
-
-
-
     
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/** Class based on Rob Camick's HSL Color library for Java
-              /** Class based on Rob Camick's HSL Color library for Java
+              /** 
+              * Written by Michael Zagar and Jonathan Lee.
+              * Started in June 2022
+              * Last Updated July 29 2022
+              * 
+              * Class based on Rob Camick's HSL Color library for Java
               * Retrieved on August 20th, 2020
               * https://tips4java.wordpress.com/2009/07/05/hsl-color/
               *
@@ -141,7 +141,7 @@
               * @mode RYB or RGB
               * @function
               */
-               setColorMode = function (mode) {
+             ColorPalette.prototype.setColorMode = function (mode) {
                this._complementColor = -1;
                this._monochromes = [-1, -1];
                this._analogues = [-1, -1];
@@ -431,8 +431,7 @@
                else s = (max - min) / (2 - max - min);
              
                return [h, s * 100, l * 100];
-             }
-             
+             }             
 </code></pre>
         </article>
     </section>
