@@ -1,11 +1,17 @@
-//Class based on Rob Camick's HSL Color library for Java
-// Retrieved on August 20th, 2020
-// https://tips4java.wordpress.com/2009/07/05/hsl-color/
-//
-// No license specified, but https://tips4java.wordpress.com/about/
-//  claims code is freely distributable and modifable.
-//
-// Functions directly translated: HSLtoRGB, HueToRGB, RGBtoHSL
+/** 
+ * Written by Michael Zagar and Jonathan Lee.
+ * Started in June 2022
+ * Last Updated July 29 2022
+ * 
+ * Class based on Rob Camick's HSL Color library for Java
+ * Retrieved on August 20th, 2020
+ * https://tips4java.wordpress.com/2009/07/05/hsl-color/
+ *
+ * No license specified, but https://tips4java.wordpress.com/about/
+ *  claims code is freely distributable and modifable.
+ *
+ * Functions directly translated: HSLtoRGB, HueToRGB, RGBtoHSL
+*/
 
 var ColorPalette = function () {
   this._baseColor = null;
@@ -20,6 +26,12 @@ var ColorPalette = function () {
   this._blackThresh = 99; // any lightness greater than this is black
   this._grayThresh = 1; // any saturation less than this is gray
 
+  /**
+   * Fills the Global array _RYBColors with colors arranged in RYB, by using the helper function colorInterp. 
+   * 
+   * Color Values and formula from this paper: 
+   * http://vis.computer.org/vis2004/DVD/infovis/papers/gossett.pdf
+   */
   this.generateColors = function () {
     let WHITE = color(255, 255, 255);
     let RED = color(255, 0, 0);
@@ -59,6 +71,11 @@ var ColorPalette = function () {
     );
   };
 
+  /**
+  *  Given an array, this interpolate the mixture between two colors in RYB.
+  * Color Values and formula from this paper: 
+  * http://vis.computer.org/vis2004/DVD/infovis/papers/gossett.pdf
+  */
   this.colorInterp = function (
     colorArray,
     color0,
@@ -95,7 +112,12 @@ var ColorPalette = function () {
   }
 };
 
-ColorPalette.prototype.setColorMode = function (mode) {
+/**
+ * Sets a global flag, allowing the user to change the colormode from RGB to RYB when they please.  
+ * @mode RYB or RGB
+ * @function
+ */
+setColorMode = function (mode) {
   this._complementColor = -1;
   this._monochromes = [-1, -1];
   this._analogues = [-1, -1];
@@ -108,22 +130,34 @@ ColorPalette.prototype.setColorMode = function (mode) {
   }
 };
 
-ColorPalette.prototype.getHSLBase = function () {
+/**
+* Returns the baseColor in HSL format.
+*/
+getHSLBase = function () {
   return this.RGBtoHSL(_baseColor);
 };
 
-ColorPalette.prototype.getBaseColor = function () {
+/**
+* Returns the baseColor;
+*/
+getBaseColor = function () {
   return this._baseColor;
 };
 
-ColorPalette.prototype.getComplement = function () {
+/**
+* Returns the complement to the baseColor;
+*/
+getComplement = function () {
   if (this._complementColor == -1) {
     this._complementColor = this.findComplement(this._baseColor);
   }
   return this._complementColor;
 };
 
-ColorPalette.prototype.getMonochromes = function () {
+/**
+* Returns an array of monochromes of the baseColor;
+*/
+getMonochromes = function () {
   //2 _monochromes assumed
   if (this._monochromes[0] == -1) {
     this._monochromes[0] = this.getShade(this._baseColor, 25);
@@ -132,7 +166,10 @@ ColorPalette.prototype.getMonochromes = function () {
   return this._monochromes;
 };
 
-ColorPalette.prototype.getAnalogues = function (angle = 30, amount =5) {
+/**
+* Returns an array of analogues of the baseColor;
+*/
+getAnalogues = function (angle = 30, amount = 5) {
   //2 _analogues assumed
   //print(this._complementColor);
   if (this._analogues[0] == -1) {
@@ -146,10 +183,14 @@ ColorPalette.prototype.getAnalogues = function (angle = 30, amount =5) {
     );
   }
   return this._analogues;
-  
+
 };
 
-ColorPalette.prototype.findComplement = function (rgbColor) {
+/**
+* Finds the complement of a given color.
+* Differentiates if the color is supposed to be returned in RGB or RYB. 
+*/
+findComplement = function (rgbColor) {
   if (this.mode == 0) {
     let hslC = RGBtoHSL(rgbColor);
     if (hslC[2] < this._whiteThresh || hslC[2] > this._blackThresh) {
@@ -170,20 +211,27 @@ ColorPalette.prototype.findComplement = function (rgbColor) {
       return HSLtoRGB(hslC);
     }
   } else if (this.mode == 1) {
-    //RYB
+    // Just get the other side of the array of RYB
     return this._RYBColors[(this._RYBIndex + 180) % this._RYBColors.length];
   }
 };
 
-//changes alpha of an rgb color and return new color.
-ColorPalette.prototype.transparent = function (rgbColor, newAlpha) {
+/**
+* Changes alpha of an rgb color and return new color.
+*/
+transparent = function (rgbColor, newAlpha) {
   //make sure alpha is between 0-255
   newAlpha = max(0, newAlpha % 255);
   //must retrieve each channel and replace alpha
   return color(red(rgbColor), green(rgbColor), blue(rgbColor), newAlpha);
 };
 
-ColorPalette.prototype.getShade = function (rgbColor = this._baseColor, shift=60 ) {
+/**
+* Calculates the shade of a given color. 
+* If no color is provided, it will use the global baseColor.
+* If no shift is provided, it will shift by 60.
+*/
+getShade = function (rgbColor = this._baseColor, shift = 60) {
   hslC = RGBtoHSL(rgbColor);
   //if white, black, or gray
   if (
@@ -203,13 +251,21 @@ ColorPalette.prototype.getShade = function (rgbColor = this._baseColor, shift=60
   }
 };
 
-ColorPalette.prototype.getTint = function (rgbColor = this._baseColor, shift = 60) {
+/**
+* Calculates the tint of a given color. 
+* If no color is provided, it will use the global baseColor.
+* If no shift is provided, it will shift by 60.
+*/
+getTint = function (rgbColor = this._baseColor, shift = 60) {
   let hslC = RGBtoHSL(rgbColor);
   hslC[2] = abs(hslC[2] + shift) % 100;
   return HSLtoRGB(hslC);
 };
 
-ColorPalette.prototype.rotateHue = function (rgbColor, angle) {
+/**
+* Rotates the hue for to get the Tint of a color.
+*/
+rotateHue = function (rgbColor, angle) {
   let hslC = RGBtoHSL(rgbColor);
   //if black, white, or gray
   if (
@@ -231,7 +287,10 @@ ColorPalette.prototype.rotateHue = function (rgbColor, angle) {
   }
 };
 
-ColorPalette.prototype.randomHue = function () {
+/**
+* Calculates a random hue.
+*/
+randomHue = function () {
   return color(
     parseInt(random(0, 255)),
     parseInt(random(0, 255)),
@@ -239,6 +298,10 @@ ColorPalette.prototype.randomHue = function () {
   );
 };
 
+/**
+* Coverts HSL to RGB with a given HSL value.
+* Further Documentation: https://tips4java.wordpress.com/about/
+*/
 function HSLtoRGB(hsl) {
   let h = hsl[0];
   let s = hsl[1];
@@ -290,6 +353,10 @@ function HSLtoRGB(hsl) {
   return color(r, g, b, alpha);
 }
 
+/**
+* Coverts HSL to RGB with a given HSL value.
+* Further Documentation: https://tips4java.wordpress.com/about/
+*/
 function HueToRGB(p, q, h) {
   if (h < 0) h += 1;
 
