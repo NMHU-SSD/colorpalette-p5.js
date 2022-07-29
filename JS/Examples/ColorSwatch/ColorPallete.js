@@ -310,17 +310,17 @@ function HSLtoRGB(hsl) {
 
   if (s < 0.0 || s > 100.0) {
     let message = "Color parameter outside of expected range - Saturation";
-    throw new IllegalArgumentException(message);
+    print(message);
   }
 
   if (l < 0.0 || l > 100.0) {
     let message = "Color parameter outside of expected range - Luminance";
-    throw new IllegalArgumentException(message);
+    print(message);
   }
 
   if (alpha < 0.0 || alpha > 1.0) {
     let message = "Color parameter outside of expected range - Alpha";
-    throw new IllegalArgumentException(message);
+    print(message);
   }
 
   //  Formula needs all values between 0 - 1.
